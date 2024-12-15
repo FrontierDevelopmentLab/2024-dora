@@ -10,8 +10,8 @@ from joblib import Parallel, delayed
 import numpy as np
 from geetiles import utils
 
-groups = "0,1,L0,L1,L2,L3,L4"
-#groups = None
+#groups = "0,1,L0,L1,L2,L3,L4"
+groups = None
 
 def main():
     parser = argparse.ArgumentParser()
@@ -24,6 +24,7 @@ def main():
     download_parser.add_argument('--pixels_lonlat', default='[512,512]', type=str, help='a tuple, if set, the tile will have this exact size in pixels, regardless the physical size. For instance --pixels_lonlat [100,100]')
     download_parser.add_argument('--shuffle_order', default=False, action='store_true', help='a tuple, if set, the tile will have this exact size in pixels, regardless the physical size. For instance --pixels_lonlat [100,100]')
     download_parser.add_argument('--aoi', default=None, type=str, help="download only predefined aoi. available 'lux', 'eur'")
+    download_parser.add_argument('--project', required=True, type=str, help='google cloud project')
 
     summary_parser = subparsers.add_parser('summary', help='summary of chipsets download progress')
     summary_parser.add_argument('--chipsets_folder', required=True, type=str, help='folder containing one geetiles geojson per chipset')
@@ -40,7 +41,7 @@ def main():
         summary(args.chipsets_folder, args.dataset, args.output_stats_file)
 
     if args.cmd=='download':
-        download(args.chipsets_folder, args.dataset, args.pixels_lonlat, args.shuffle_order, args.aoi)
+        download(args.chipsets_folder, args.dataset, args.pixels_lonlat, args.shuffle_order, args.aoi, args.project)
 
 def summary(chipsets_folder, dataset, output_stats_file):
 
@@ -72,9 +73,10 @@ def summary(chipsets_folder, dataset, output_stats_file):
     print (r[partially_downloaded])
 
 
-def download(chipsets_folder, dataset, pixels_lonlat, shuffle_order, aoi):
+def download(chipsets_folder, dataset, pixels_lonlat, shuffle_order, aoi, ee_project):
 
     chipsets_files = [f for f in os.listdir(chipsets_folder) if f.endswith(".geojson")]
+    logger.info(f'downloading {len(chipsets_files)} files fom {chipsets_folder}')
     if aoi is not None:
         # use only the chipsets covering the requested aoi
         logger.info(f"getting chipsets for aoi {aoi}")
@@ -119,6 +121,7 @@ def download(chipsets_folder, dataset, pixels_lonlat, shuffle_order, aoi):
                 shuffle          = True,
                 max_downloads   = None,
                 groups          = groups,
+                ee_project      = ee_project,
                 aoi             = aoi
             )
         else:
