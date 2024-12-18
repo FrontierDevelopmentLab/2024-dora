@@ -16,4 +16,4 @@ SHUFFLE=--shuffle_order
 PROJECT=esl-sar-fm
 echo python geedownload_chipsets.py download --chipsets_folder $CHIPSETS_FOLDER --dataset $DATASET $AOI $PIXELS_LONLAT $SHUFFLE --project $PROJECT
 
-python geedownload_chipsets.py download --chipsets_folder $CHIPSETS_FOLDER --dataset $DATASET $AOI $PIXELS_LONLAT $SHUFFLE --project $PROJECT
+python geedownload_chipsets.py download --chipsets_folder $CHIPSETS_FOLDER --dataset $DATASET $AOI $PIXELS_LONLAT $SHUFFLE --project $PROJECT 

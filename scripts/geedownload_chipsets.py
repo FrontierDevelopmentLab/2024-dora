@@ -116,7 +116,7 @@ def download(chipsets_folder, dataset, pixels_lonlat, shuffle_order, aoi, ee_pro
                 skip_confirm   = True,
                 skip_if_exists = True,
                 ee_auth_mode   = None,
-                n_processes    = 20, 
+                n_processes    = 30, 
                 meters_per_pixel = None, 
                 shuffle          = True,
                 max_downloads   = None,
